@@ -20,13 +20,11 @@
                         <a class="nav-link text-white " href="dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="features_fac.php">Rooms</a>
+                        <a class="nav-link text-white" href="rooms.php">Rooms</a>
                     </li>
+                 
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="features.php">Rooms test</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="rooms.php">Features & Facilities</a>
+                        <a class="nav-link text-white" href="features_fac.php">Features & Facilities</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="user_queries.php">User Queries</a>

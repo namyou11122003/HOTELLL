@@ -1,4 +1,4 @@
-<!-- 
+
  
 <?php
 if (session_status() == PHP_SESSION_NONE) {
@@ -214,4 +214,3 @@ if (isset($_GET['del'])) {
 
 </html>
 
--->

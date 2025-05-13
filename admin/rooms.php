@@ -1,9 +1,8 @@
 <?php
     session_start();
 
-    require('inc/essen.php');
+    // require('inc/essen.php');
     require('inc/db_config.php');
-    adminLogin();
 
     if(isset($_GET['seen']))
     {
