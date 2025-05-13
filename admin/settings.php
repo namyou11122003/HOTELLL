@@ -1,6 +1,6 @@
 <?php
+    session_start();
     require('inc/essen.php');
-    adminLogin();
 ?>
 
 <!DOCTYPE html>

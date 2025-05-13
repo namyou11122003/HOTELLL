@@ -1,85 +1,73 @@
 <?php
-    require('inc/essen.php');
-    require('inc/db_config.php');
-    adminLogin();
+session_start();
+require('inc/essen.php');
+require('inc/db_config.php');
 
-    if(isset($_GET['seen']))
-    {
-        $frm_data = filteration($_GET);
-        if($frm_data['seen']== 'all'){
-            $q = "UPDATE `user_queries` SET `seen`=?";
-            $values = [1];
-            if(update($q,$values,'i'))
-            {
-                alert('success','Query marked as seen');
-            }
-            else
-            {
-                alert('error','Something went wrong');
-            }
-        }else{
-            $q = "UPDATE `user_queries` SET `seen`=? WHERE `sr_no` = ?";
-            $values = [1,$frm_data['seen']];
-            if(update($q,$values,'ii'))
-            {
-                alert('success','Query marked as seen');
-            }
-            else
-            {
-                alert('error','Something went wrong');
-            }
+
+if (isset($_GET['seen'])) {
+    $frm_data = filteration($_GET);
+    if ($frm_data['seen'] == 'all') {
+        $q = "UPDATE `user_queries` SET `seen`=?";
+        $values = [1];
+        if (update($q, $values, 'i')) {
+            alert('success', 'Query marked as seen');
+        } else {
+            alert('error', 'Something went wrong');
         }
-       
+    } else {
+        $q = "UPDATE `user_queries` SET `seen`=? WHERE `sr_no` = ?";
+        $values = [1, $frm_data['seen']];
+        if (update($q, $values, 'ii')) {
+            alert('success', 'Query marked as seen');
+        } else {
+            alert('error', 'Something went wrong');
+        }
     }
-    if(isset($_GET['del']))
-    {
-        $frm_data = filteration($_GET);
-        
+
+}
+if (isset($_GET['del'])) {
+    $frm_data = filteration($_GET);
+
+    $values = [$frm_data['del']];
+    if (delete($q, $values, 'i')) {
+        $q = "DELETE FROM `user_queries`";
+        if (mysqli_query($con, $q)) {
+            alert('success', 'All data deleted!');
+        } else {
+            alert('error', 'Something went wrong');
+        }
+    } else {
+        $q = "DELETE FROM `user_queries` WHERE `sr_no` = ?";
         $values = [$frm_data['del']];
-        if(delete($q,$values,'i'))
-        {
-            $q = "DELETE FROM `user_queries`";   
-            if(mysqli_query($con,$q))
-            {
-                alert('success','All data deleted!');
-            }
-            else
-            {
-                alert('error','Something went wrong');
-            }   
-        }else{
-            $q = "DELETE FROM `user_queries` WHERE `sr_no` = ?";
-            $values = [$frm_data['del']];
-            if(delete($q,$values,'i'))
-            {
-                alert('success','Query deleted');
-            }
-            else
-            {
-                alert('error','Something went wrong');
-            }
+        if (delete($q, $values, 'i')) {
+            alert('success', 'Query deleted');
+        } else {
+            alert('error', 'Something went wrong');
         }
-        
     }
-    
+
+}
+
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - User Queries</title>
     <?php require('inc/link.php'); ?>
 </head>
+
 <body class="bg-light">
     <?php require('inc/header.php'); ?>
     <div class="container-fluid" id="main-content">
         <div class="row">
             <div class="col-lg-10 ms-auto p-4 overflow-hidden ">
                 <h3 class="mb-4">USER QUERIES</h3>
-            
+
 
                 <!-- Carousel  section-->
                 <div class="card border-0 shadow-sm mb-4">
@@ -94,7 +82,7 @@
                             </a>
                         </div>
 
-                        <div class="table-responsive-md" style="height: 450px; overflow-y: scroll;" >
+                        <div class="table-responsive-md" style="height: 450px; overflow-y: scroll;">
                             <table class="table tabel-hover broder">
                                 <thead class="stiky-top">
                                     <tr class="bg-dark text-light">
@@ -109,19 +97,17 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $q = "SELECT * FROM `user_queries` ORDER BY `id` DESC";
-                                        $data = mysqli_query($con, $q);
-                                        $i = 1;
+                                    $q = "SELECT * FROM `user_queries` ORDER BY `id` DESC";
+                                    $data = mysqli_query($con, $q);
+                                    $i = 1;
 
-                                        while($row = mysqli_fetch_assoc($data)) 
-                                        {
-                                            $seen ='';
-                                            if($row['seen'] !=1)
-                                            {
-                                                $seen = "<a href='?seen=$row[sr_no]' class='btn btn-sm rounded-pill btn-primary'>Mark as Seen</a>";
-                                            }
-                                            $seen = "<a href='?del=$row[sr_no]' class='btn btn-sm rounded-pill btn-danger mt-2'>Delete</a>";
-                                            echo<<<query
+                                    while ($row = mysqli_fetch_assoc($data)) {
+                                        $seen = '';
+                                        if ($row['seen'] != 1) {
+                                            $seen = "<a href='?seen=$row[sr_no]' class='btn btn-sm rounded-pill btn-primary'>Mark as Seen</a>";
+                                        }
+                                        $seen = "<a href='?del=$row[sr_no]' class='btn btn-sm rounded-pill btn-danger mt-2'>Delete</a>";
+                                        echo <<<query
                                                 <tr>
                                                     <td>$i</td>
                                                     <td>$row[name]</td>
@@ -136,8 +122,8 @@
                                                     </td>
                                                 </tr>
                                             query;
-                                            $i++;
-                                        }
+                                        $i++;
+                                    }
                                     ?>
                                 </tbody>
                             </table>
@@ -147,8 +133,9 @@
             </div>
         </div>
     </div>
-    
+
     <?php require('inc/scripts.php'); ?>
-   
+
 </body>
+
 </html>

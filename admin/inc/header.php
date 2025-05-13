@@ -9,7 +9,7 @@
 <!-- Sidebar -->
 <div class="col-lg-2 bg-dark border-top border-3 border-secondary h-100" id="dashboard-menu" >
     <nav class="navbar navbar-expand-lg navbar-dark " id="dashboard-menu">
-        <div class="container-fluid flex-lg-column align-items-stretch">
+        <div class="container-fluid flex-lg-column align-items-stretch h-100">
             <h4 class="mt-2 text-light">ADMIN PANEL</h4>
             <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#adminDropdown" aria-controls="adminDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -21,6 +21,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="features_fac.php">Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="features.php">Rooms test</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="rooms.php">Features & Facilities</a>

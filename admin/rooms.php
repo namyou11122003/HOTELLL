@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     require('inc/essen.php');
     require('inc/db_config.php');
     adminLogin();
