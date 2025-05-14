@@ -1,387 +1,623 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TJ Hotel-HOME</title>
-    <link rel="stylesheet" href="style.css">
-    <?php require('inc/link.php'); ?>
+    <title>Hotel Booking</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand span {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background-color: #f8f9fa;
+            color: #333;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        .hero-section {
+            background-image: url('/api/placeholder/1200/500');
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            position: relative;
+            color: white;
+            text-align: center;
+            padding-top: 150px;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .booking-form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .section-heading::after {
+            content: '';
+            display: block;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='20' viewBox='0 0 100 20'%3E%3Cpath d='M0,10 C30,20 70,0 100,10' stroke='%23ddd' fill='none' stroke-width='2'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        .room-card {
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .features-section {
+            background-color: #212529;
+            color: white;
+            padding: 50px 0;
+        }
+
+        .features-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .features-tabs button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .features-tabs button:hover,
+        .features-tabs button.active {
+            border-bottom: 2px solid #dc3545;
+        }
+
+        .feature-box {
+            margin-bottom: 30px;
+        }
+
+        .events-section {
+            padding: 50px 0;
+        }
+
+        .event-card {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .event-date {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background-color: #dc3545;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .event-date .day {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        footer {
+            background-color: #212529;
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        footer h5 {
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        footer ul li {
+            margin-bottom: 10px;
+        }
+
+        footer ul li a {
+            color: #adb5bd;
+            text-decoration: none;
+        }
+
+        footer ul li a:hover {
+            color: white;
+        }
+
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background-color: #495057;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 10px;
+        }
+
+        .book-now-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        .book-now-btn:hover {
+            background-color: #c82333;
+            color: white;
+        }
+
+        .view-all-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 30px;
+            border: none;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+        }
+    </style>
 </head>
-<body class="bg-light">
-    
-    <?php require('inc/header.php'); ?>
-    <div class="container-fluid px-lg-4 mt-4">
-        
-        <!-- Swiper -->
-        <div class="swiper swiper-container">
-            <div class="swiper-wrapper">
-                <?php
-                    $res = selectALL('carousel');
-                        while($row = mysqli_fetch_assoc($res))
-                        {
-                            $path = CAROUSEL_FOLDER;
-                            echo <<<data
-                                <div class="swiper-slide">
-                                    <img src="$path$row[image]" class="w-100 d-block"  />
-                                </div>
-                            data;
-                        }
-                 ?>
-            </div>
-        </div>
-    </div>
 
-    <div class="container availability-form" >
-        <div class="row">
-            <div class="col-lg-12 bg-white shadow p-4 rounded">
-                <h5 class="mb-4">Check Booking Availability</h5>
-                <form>
-                    <div class="row align-item-end">
-                        <div class="col-lg-3 mb-3">
-                            <label class="form-label" style="font-weight: 500;">Check-in</label>
-                            <input type="date" class="form-control shadow-none">
-                        </div>
-                        <div class="col-lg-3 mb-3">
-                            <label class="form-label" style="font-weight: 500;">Check-out</label>
-                            <input type="date" class="form-control shadow-none">
-                        </div>
-                        <div class="col-lg-3 mb-3">
-                            <label class="form-label" style="font-weight: 500;">Adult</label>
-                            <select class="form-select shadow-none">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2 mb-2">
-                            <label class="form-label" style="font-weight: 500;">Children</label>
-                            <select class="form-select  shadow-none">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-1 mb-lg-3 mb-2">
-                            <button type="submit" class="btn text-white shadow-none custom-bg">Submit</button>
-                        </div>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <span>H</span>otel Booking
+                </a>
+                <div class="d-flex align-items-center">
+                    <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-pinterest"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-google-plus-g"></i></a>
+                </div>
+                <div class="">
+                    <button class="btn btn-outline-secondary btn-sm ms-3"><a class="btn text-decoration-none "
+                            href="./login.php">Sign in</a></button>
+                    <button class="btn btn-outline-secondary btn-sm ms-3"><a class="btn text-decoration-none "
+                            href="./register.php">Sign in</a></button>
+                </div>
+            </div>
+        </nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">HOME</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button"
+                                data-bs-toggle="dropdown">
+                                ABOUT US
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Our Story</a></li>
+                                <li><a class="dropdown-item" href="#">Mission & Vision</a></li>
+                                <li><a class="dropdown-item" href="#">Team</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="roomsDropdown" role="button"
+                                data-bs-toggle="dropdown">
+                                ROOMS
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Standard Room</a></li>
+                                <li><a class="dropdown-item" href="#">Deluxe Room</a></li>
+                                <li><a class="dropdown-item" href="#">Suite</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button"
+                                data-bs-toggle="dropdown">
+                                SERVICES
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Restaurant</a></li>
+                                <li><a class="dropdown-item" href="#">Spa</a></li>
+                                <li><a class="dropdown-item" href="#">Fitness Center</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button"
+                                data-bs-toggle="dropdown">
+                                GALLERY
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Rooms</a></li>
+                                <li><a class="dropdown-item" href="#">Dining</a></li>
+                                <li><a class="dropdown-item" href="#">Facilities</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" role="button"
+                                data-bs-toggle="dropdown">
+                                BLOG
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Latest News</a></li>
+                                <li><a class="dropdown-item" href="#">Travel Tips</a></li>
+                                <li><a class="dropdown-item" href="#">Events</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="contactDropdown" role="button"
+                                data-bs-toggle="dropdown">
+                                CONTACT
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Location</a></li>
+                                <li><a class="dropdown-item" href="#">Contact Form</a></li>
+                                <li><a class="dropdown-item" href="#">FAQ</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="ms-auto">
+                        <a href="#" class="btn book-now-btn">BOOK NOW</a>
                     </div>
-                </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section with Carousel -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="hero-section " style="background-image: url('./imagehotel/1.jpg');">
+                    <div class="container">
+                        <h1>Welcome to Hotely</h1>
+                        <p>THE PLACE WHERE YOU LOOKING TO</p>
+                        <button class="btn btn-outline-light mt-3">EXPLORE NOW</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="hero-section" style="background-image: url('./imagehotel/2.jpg');">
+                    <div class="container">
+                        <h1>Luxury & Comfort</h1>
+                        <p>EXPERIENCE THE BEST HOSPITALITY</p>
+                        <button class="btn btn-outline-light mt-3">DISCOVER MORE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="hero-section" style="background-image: url('./imagehotel/3.jpg');">
+                    <div class="container">
+                        <h1>Luxury & Comfort</h1>
+                        <p>EXPERIENCE THE BEST HOSPITALITY</p>
+                        <button class="btn btn-outline-light mt-3">DISCOVER MORE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="hero-section" style="background-image: url('./imagehotel/4.jpg');">
+                    <div class="container">
+                        <h1>Luxury & Comfort</h1>
+                        <p>EXPERIENCE THE BEST HOSPITALITY</p>
+                        <button class="btn btn-outline-light mt-3">DISCOVER MORE</button>
+                    </div>
+                </div>
             </div>
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 
-    <h2 class=" pt-4 mb-4 text-center fw-bold ">OUR ROOMS</h2>
+    <!-- Booking Form -->
     <div class="container">
         <div class="row">
-            <?php
-                    $room_res = select("SELECT * FROM `rooms` WHERE `status`=? AND `removed=`?  ORDER BY `id` dsc LIMIT 3",[1,0],'ii');
-                    while($room_data = mysqli_fetch_assoc($room_res))
-                    {
-                        // get features of room
-                        $fea_q = mysqli_query($con,"SELECT f.name FROM `features` f
-                        INNER JOIN `room_features` rfea ON f.id = rfea.features_id 
-                        WHERE rfea.room_id = '$room_data[id]'");
-
-                        $features_data = "";
-                        while($fea_row = mysqli_fetch_assoc($fea_q)){
-                            $features_data .="<span class='badge rounded-pill bg-light text-dark text-wrap'>
-                            
-                            </span> $fea_row[name]";
-                            
-                        }
-                        //get facilities of room
-                        $fea_q = mysqli_query($con,"SELECT f.name FROM `facilities` f
-                        INNER JOIN `room_facilities` rfea ON f.id = rfea.facilities_id 
-                        WHERE rfea.room_id = '$room_data[id]'");
-
-                        $facilities_data = "";
-                        while($fec_row = mysqli_fetch_assoc($fea_q)){
-                            $facilities_data .="<span class='badge rounded-pill bg-light text-dark text-wrap'>
-                            
-                            </span> $fac_row[name]";
-                            
-                        }
-                        //get thumbnail of image
-                        $room_thumb = ROOMS_IMG_PATH."thumbnail.jpg";
-                        $thumb_q = mysqli_query($con,"SELECT * FROM `room_image`
-                        WHERE `room_id`='$room_data[id]'
-                        AND `thumb`='1'");
-
-                        if(mysqli_num_rows($thumb_q)>0){
-                            $thumb_res= mysqli_fetch_assoc($thumb_q);
-                            $room_thumb = ROOMS_IMG_PATH.$thumb_res['imgage'];
-
-                        }
-
-                        // print room card
-                        echo <<<data
-                             <div class="col-lg-4 col-md-6 my-3">
-                                <div class="card border-0 shadow" style="max-width: 350px; margin: auto">
-                                    <img src="$room_thumb" class="card-img-top">
-                                    <div class="card-body">
-                                        <h5>Simple Room Name</h5>
-                                        <h5 class="mb-3">$room_data[price]</h5>
-                                        <div class="features mb-3">
-                                            <h6 class="mb-1">Features</h6>
-                                            $features_data
-                                        </div>
-                                        <div class="facilities mb-4">
-                                            <h6 class="mb-1">Facilities</h6>
-                                            $facilities_data
-                                        </div>
-                                        <div class="guests mb-4"</h6>
-                                            <h6 class="mb-1">Guests</h6>
-                                            <span class="badge rounded-pill bg-light text-dakr text-wrap">
-                                                $room_data[adult]Adults
-                                            </span>
-                                            <span class="badge rounded-pill bg-light text-dakr text-wrap">
-                                                $room_data[children]Children
-                                            </span>
-                                        </div>
-                                        <div class="rating mb-4">
-                                            <h6 class="mb-1">Rating</h6>
-                                            <span class="badge rounded-pill bg-light text-dark text-wrap">
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                            </span>
-                                        </div>
-
-                                        <div class="d-flex justify-content-evenly mb-2">
-                                            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-                                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>
-                                        </div>
-                                            <p class="card-text">Some quick examptext to build on the card title and make up the bulk of the card's content.</p> -->
-                                            <a href="room_details.php?id=$room_data[id]" class="btn btn-primary">Go somewhere</a> -->
-                                    </div>
-                                </div>
+            <div class="col-lg-10 mx-auto">
+                <div class="booking-form">
+                    <div class="row align-items-end">
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <label for="email">E-mail</label>
+                            <div class="input-group">
+                                <input type="email" class="form-control" id="email"
+                                    placeholder="Please enter your e-mail">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                             </div>
-                        data;  
-                    }
-                ?>
-            <div class="col-lg-12 text-center mt-5">
-                <a href="rooms.php" class="btn btn-sm btn-outline-dark rounded-0 fw-blod shadow-none ">More Rooms >>></a>
-            </div>
-        </div>
-    </div>
-
-    <h2 class=" pt-4 mb-4 text-center fw-bold ">OUR FACILITIES</h2>
-    <div class="container">
-        <div class="row justify-content-evenly px-lg-0 px-md-0 px-5">
-            <?php
-                $res = mysqli_query($con, "SELECT * FROM `facilities` LIMIT 5 ORDER BY dcs");
-                $path = FACILITIES_IMG_PATH;
-
-                while($row = mysqli_fetch_assoc($res)){
-                    echo<<<data
-                        <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-                            <img src="$path$row[icon]" width="80px">
-                            <h5 class="mt-3">$row[name]</h5>
                         </div>
-                    data;
-                }
-            ?>
-            <div class="col-lg-12 text-center mt-5">
-                <a href="facilities.php" class="btn btn-outline-dark rounded-0 fw-bold shadow-none">More facilities</a>
-            </div>
-        </div>
-    </div>
-
-    <h2 class=" pt-4 mb-4 text-center fw-bold ">TESTIMONIALS</h2>
-    <div class="container mt-5">
-        <div class="swiper swiper-testimonails">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide bg-white p-4">
-                    <div class="profile d-flex align-item-center mb-3">
-                        <img src="img/features/star.svg" width="30px">
-                        <h6 class="m-0 ms-2">Random User</h6>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,  
-                            Sed laborum aliquid enim voluptates quaerat numquam?
-                        </p>
-                        <div class="rating">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <label for="roomType">Room Type</label>
+                            <div class="input-group">
+                                <select class="form-select" id="roomType">
+                                    <option selected>Select a room</option>
+                                    <option>Standard Room</option>
+                                    <option>Deluxe Room</option>
+                                    <option>Suite</option>
+                                </select>
+                                <span class="input-group-text"><i class="fas fa-bed"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <label for="checkIn">Check-in</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="checkIn" placeholder="Check-in">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <label for="checkOut">Check-out</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="checkOut" placeholder="Check-out">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-1 mb-3 mb-md-0">
+                            <label for="guests">Guests</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="guests" value="1" min="1">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn book-now-btn w-100">BOOK NOW</button>
                         </div>
                     </div>
                 </div>
-                <div class="swiper-slide bg-white p-4">
-                    <div class="profile d-flex align-item-center mb-3">
-                        <img src="img/features/star.svg" width="30px">
-                        <h6 class="m-0 ms-2">Random User</h6>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,  
-                            Sed laborum aliquid enim voluptates quaerat numquam?
-                        </p>
-                        <div class="rating">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide bg-white p-4">
-                    <div class="profile d-flex align-item-center mb-3">
-                        <img src="img/features/star.svg" width="30px">
-                        <h6 class="m-0 ms-2">Random User</h6>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,  
-                            Sed laborum aliquid enim voluptates quaerat numquam?
-                        </p>
-                        <div class="rating">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
-            <div class="swiper-pagination"></div>
         </div>
-        
-    </div>
-    
-    <?php 
-        $connect_q = "SELECT * FROM `contact_details` WHERE 'sr_no' = ?";
-        $values = [1];
-        $connect_r = mysqli_fetch_assoc(select($connect_q,$values,'i'));
-        print_r($connect_r);
-    ?>
-
-
-    <h2 class=" mt-5 pt-4 mb-4 text-center fw-bold ">REACH US</h2>
-    <div class="row">
-            <div class="col-lg-8 col-md-8 p-4 mb-lg-0 mb-3 bg-white rounded">
-                <iframe class="w-100 rounded" height="320px" src= "<?php echo $connect_r['iframe']; ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-            <div class="col-lg-4 col-md-4">
-                <div class="bg-white p-4 rounded mb-4">
-                    <h5>Call Us</h5>
-                    <a href="tel: +<?php echo $contact_r['pn1']; ?>" class="d-inline-block mb-2 text-decoration-none text-dark">
-                        <i class="bi bi-telephone"></i> <?php echo $connect_r['pn1']; ?>
-                    </a>
-                    <br>
-                    <?php 
-                        if ($connect_r['pn2'] != '') {
-                            
-                            echo <<<data
-                                <a href="tel: +$contact_r[$pn2]" class="d-inline-block mb-2 text-decoration-none text-dark">
-                                    <i class="bi bi-telephone"></i> +$contact_r[pn2];
-                                </a>
-                        data;
-                        }
-                    ?>
-
-                    
-                </div>
-                <div class="bg-white p-4 rounded mb-4">
-                    <h5>Follow Us</h5>
-                    <?php 
-                        if($connect_r['fb'] != ''){
-                            echo <<<data
-                                <a href="$connect_r[fb]" class="d-inline-block mb-3">
-                                    <span class="badge bg-light text-dark fs-6 p-2">
-                                        <i class="bi bi-facebook me-1"></i>Facebook;
-                                    </span>
-                                </a>
-                                <br>
-                            data;
-                        }
-                    ?>
-                    
-                    <br>
-                    <a href="#" <?php echo $contact_r['ig'] ?> class="d-inline-block mb-3">
-                        <span class="badge bg-light text-dark fs-6 p-2">
-                        <i class="bi bi-instagram"></i> Instagram
-                        </span>
-                        
-                    </a>
-                    <br>
-                    <a href="#" <?php echo $contact_r['gh'] ?> class="d-inline-block mb-3">
-                        <span class="badge bg-light text-dark fs-6 p-2">
-                        <i class="bi bi-github"></i> Github
-                        </span>
-                    </a>
-
-                    
-                </div>
-            </div>
     </div>
 
-    
-    <?php require('inc/footer.php'); ?>
-    <?php require('inc/loginon.php'); ?>
+    <!-- Welcome Section -->
+    <section class="container mt-5">
+        <div class="section-heading">
+            <h2>WELCOME TO HOTEL</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <p class="text-muted">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+                    and scrambled it to make a type specimen book.
+                    <a href="#" class="text-danger">Read more...</a>
+                </p>
+            </div>
+        </div>
 
-
-    <!-- <div class="container-fluid px-lg-4 mt-4">
-        <!-- Swiper -->
-        <!-- <div class="swiper swiper-container">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <img src="img/IMG_15372.png" class="w-100 d-block"  />
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="room-card">
+                    <img src="./imagehotel/10" alt="Room" class="img-fluid">
                 </div>
-                <div class="swiper-slide">
-                    <img src="img/IMG_40905.png" class="w-100 d-block" />
+            </div>
+            <div class="col-md-4">
+                <div class="room-card">
+                    <img src="./imagehotel/5.png" alt="Room" class="img-fluid">
                 </div>
-                <div class="swiper-slide">
-                    <img src="img/IMG_55677.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="img/IMG_62045.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="img/IMG_93127.png" class="w-100 d-block" />
-                </div>
-                <div class="swiper-slide">
-                    <img src="img/IMG_99736.png" class="w-100 d-block" />
+            </div>
+            <div class="col-md-4">
+                <div class="room-card">
+                    <img src="./imagehotel/11.png" alt="Room" class="img-fluid">
                 </div>
             </div>
         </div>
-    </div> --> -->
 
+        <button class="btn view-all-btn">View All</button>
+    </section>
 
+    <!-- Features Section -->
+    <section class="features-section mt-5">
+        <div class="container">
+            <div class="section-heading">
+                <h2 class="text-white">WHY TO CHOOSE US?</h2>
+            </div>
 
-    
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-    var swiper = new Swiper(".swiper-container", {
-      spaceBetween: 30,
-      effect: "fade",
-      loop:true,
-      autoplay:{
-        delay: 3500,
-        disableOnInteraction:false,
-      }
-    });
+            <div class="features-tabs">
+                <button class="active">ALL</button>
+                <button>DESERT</button>
+                <button>COFFEE</button>
+                <button>CATERING</button>
+                <button>SERVICES</button>
+            </div>
 
-    var swiper = new Swiper(".wiper-testimonails", {
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      coverflowEffect: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-      },
-    });
-    
-  </script>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <img src="./imagehotel/food1.jpg" alt="Feature" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <img src="./imagehotel/food2.jpg" alt="Feature" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <img src="./imagehotel/food2.jpg" alt="Feature" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <img src="./imagehotel/food2.jpg" alt="Feature" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <img src="./imagehotel/swim1.jpg" alt="Feature" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <img src="./imagehotel/food2.jpg" alt="Feature" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn view-all-btn">View All</button>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events-section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Upcomming</h2>
+                <h3>Events</h3>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="event-card">
+                        <img src="./imagehotel/event1.jpg" alt="Event" class="img-fluid">
+                        <div class="event-date">
+                            <span class="day">25</span>
+                            <span class="month">APRIL</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-muted">Lorem Ipsum is simply dummy text of the printing and...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="event-card">
+                        <img src="./imagehotel/even2.jpg" alt="Event" class="img-fluid">
+                        <div class="event-date">
+                            <span class="day">22</span>
+                            <span class="month">JUNE</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-muted">Lorem Ipsum is simply dummy text of the printing and...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="event-card">
+                        <img src="./imagehotel/even3.jpg" alt="Event" class="img-fluid">
+                        <div class="event-date">
+                            <span class="day">15</span>
+                            <span class="month">JULY</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-muted">Lorem Ipsum is simply dummy text of the printing and...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5>ADDRESS</h5>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Hyderabad, Jaipur</li>
+                        <li><i class="fas fa-phone me-2"></i> 0512345678</li>
+                        <li><i class="fas fa-envelope me-2"></i> hotel@gmail.com</li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5>INFORMATION</h5>
+                    <ul>
+                        <li><a href="#">Delivery Information</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Site Map</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5>MY ACCOUNT</h5>
+                    <ul>
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">Order History</a></li>
+                        <li><a href="#">Wish List</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>NEWSLETTER</h5>
+                    <p>Subscribe to our newsletter for latest news, tips, and advice.</p>
+                    <div class="input-group mt-3">
+                        <input type="email" class="form-control" placeholder="Your Email">
+                        <button class="btn book-now-btn">GO</button>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>© 2018 - Hotel. All rights.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

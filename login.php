@@ -1,150 +1,68 @@
-<?php session_start(); ?>
-
-
+<?php
+session_start();
+include "./config/db.php"
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <title>Admin Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Login Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+    <!-- <link rel="stylesheet" href="login-form.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        .login-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            margin: 1rem 0;
-        }
-
-        .remember-me input {
-            margin-right: 0.5rem;
-        }
-
-        .login-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            width: 100%;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .login-button:hover {
-            background-color: #45a049;
-        }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .form-footer a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <?php require('inc/link.php'); ?>
 </head>
 
-<body>
-    <div class="login-container">
-        <div class="login-header">
-            <h2>Login</h2>
-            <p>Please enter your credentials to log in</p>
-        </div>
+<body class="bg-light">
 
-        <form id="loginForm" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+    <div class="login-form text-center rounded bg-white shadow overflow-hidden">
+        <form method="POST" action="">
+            <h4 class="bg-dark text-white py-3">ADMIN LOGIN PANEL</h4>
+            <div class="p-4">
+                <div class="mb-3">
+                    <label class="form-label">Admin Name</label>
+                    <input name="admin_name" required type="text" class="form-control shadow text-center"
+                        placeholder="Admin Name">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input name="admin_password" required type="password" class="form-control shadow-none text-center"
+                        placeholder="Password">
+                </div>
+                <button name="login" type="submit" class="btn btn-primary w-100">LOGIN</button>
             </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-
-            <div class="remember-me">
-                <input type="checkbox" id="remember" name="remember">
-                <label for="remember">Remember me</label>
-            </div>
-
-            <button type="submit" class="login-button" name="login">Log In</button>
         </form>
-
-        <div class="form-footer">
-            <p><a href="#">Forgot password?</a></p>
-            <p>Don't have an account? <a href="#">Sign up</a></p>
-        </div>
     </div>
-    <?php
-    $con = new mysqli("localhost", "root", "", "hotel");
-    if (isset($_POST['login'])) {
-        $name = $_POST['username'];
-        $pwd = $_POST['password'];
-        $employee_Sql = "SELECT * FROM `admin` WHERE admin_name = $name AND admin_pw  = $pwd";
-        $employee_Result = $con->query($employee_Sql);
-        if ($employee_result->num_rows > 0) {
-            $row = $employee_result->fetch_assoc();
-            if ($row['admin_pw']) {
-                $_SESSION['name'] = $row['admin_name'];
-                header("location : ./admin/dashboard.php");
-                exit();
 
+    <?php
+    if (isset($_POST['login'])) {
+        $admin = $_POST['admin_name'];
+        $pwd = $_POST['admin_password'];
+
+        $stmt = $con->prepare("SELECT * FROM `admin` WHERE `admin_name` = ?");
+        $stmt->bind_param("s", $admin);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if ($res->num_rows > 0) {
+            $row = $res->fetch_assoc();
+            if ($row['admin_pw']) {
+                session_regenerate_id(true);
+                $_SESSION['admin'] = $row['admin_name'];
+                header("location: ./AdminDashboard/index.php");
+                exit;
             }
         }
+        echo "<div class='alert alert-danger text-center mt-3'>Invalid Credentials</div>";
     }
-
     ?>
 
-
+    <!-- <?php require('inc/scripts.php'); ?> -->
 </body>
 
 </html>
