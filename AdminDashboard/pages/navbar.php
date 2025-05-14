@@ -8,12 +8,12 @@
     </div>
     <ul class="nav flex-column mt-4">
         <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link active" href="./index.php">
                 <i class="fas fa-home"></i> home
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="./file.php">
                 <i class="fas fa-file"></i> file
             </a>
         </li>

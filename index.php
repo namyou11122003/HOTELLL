@@ -229,9 +229,9 @@
                 </div>
                 <div class="">
                     <button class="btn btn-outline-secondary btn-sm ms-3"><a class="btn text-decoration-none "
-                            href="./login.php">Sign in</a></button>
+                            href="./login.php">Sign In</a></button>
                     <button class="btn btn-outline-secondary btn-sm ms-3"><a class="btn text-decoration-none "
-                            href="./register.php">Sign in</a></button>
+                            href="./register.php">Sign Up</a></button>
                 </div>
             </div>
         </nav>
@@ -376,50 +376,51 @@
             <div class="col-lg-10 mx-auto">
                 <div class="booking-form">
                     <div class="row align-items-end">
-                        <div class="col-md-3 mb-3 mb-md-0">
-                            <label for="email">E-mail</label>
-                            <div class="input-group">
-                                <input type="email" class="form-control" id="email"
-                                    placeholder="Please enter your e-mail">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <form action="./AdminDashboard/customer/customer_booking.php" method="post" class="d-flex">
+
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <label for="email">E-mail</label>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" id="email"
+                                        placeholder="Please enter your e-mail" name="email">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2 mb-3 mb-md-0">
-                            <label for="roomType">Room Type</label>
-                            <div class="input-group">
-                                <select class="form-select" id="roomType">
-                                    <option selected>Select a room</option>
-                                    <option>Standard Room</option>
-                                    <option>Deluxe Room</option>
-                                    <option>Suite</option>
-                                </select>
-                                <span class="input-group-text"><i class="fas fa-bed"></i></span>
+                            <div class="col-md-2 mb-3 mb-md-0">
+                                <label for="roomType">Room Type</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="roomType" name="room_type">
+                                        <option selected>Select a room</option>
+                                        <option value="Standard Room">Standard Room</option>
+                                        <option value="Deluxe Room">Deluxe Room</option>
+                                        <option value="Suite">Suite</option>
+                                    </select>
+                                    <span class="input-group-text"><i class="fas fa-bed"></i></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2 mb-3 mb-md-0">
-                            <label for="checkIn">Check-in</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="checkIn" placeholder="Check-in">
-                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <div class="col-md-2 mb-3 mb-md-0">
+                                <label for="checkIn">Check-in</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="checkIn" placeholder="Check-in" name="check_in">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2 mb-3 mb-md-0">
-                            <label for="checkOut">Check-out</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="checkOut" placeholder="Check-out">
-                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <div class="col-md-2 mb-3 mb-md-0">
+                                <label for="checkOut">Check-out</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="checkOut" placeholder="Check-out" name="check_out">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-1 mb-3 mb-md-0">
-                            <label for="guests">Guests</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="guests" value="1" min="1">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <div class="col-md-1 mb-3 mb-md-0">
+                                <label for="guests">Guests</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="guests" value="1" min="1" name="guests">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn book-now-btn w-100">BOOK NOW</button>
-                        </div>
+                            <div class="col-md-2">
+                                <button class="btn book-now-btn w-100" type="submit" name="booking_room">BOOK NOW</button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
